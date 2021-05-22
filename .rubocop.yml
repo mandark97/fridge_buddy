@@ -1,0 +1,11 @@
+inherit_from:
+  - .rubocop_airbnb.yml
+
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'bin/{rails,rake,bundle}'
+    - 'Gemfile'
+    - !ruby/regexp /old_and_unused\.rb$/
