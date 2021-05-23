@@ -1,24 +1,13 @@
-# README
+# Fridge Buddy
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Small Rails with React application to find recipes based on what you have in your fridge. Recipes are provided from the website www.marmiton.org, using a seed json [recipes.json](http://d1sf7nqdl8wqk.cloudfront.net/recipes.json.gz). 
 
-Things you may want to cover:
 
-* Ruby version
+## Database schema
 
-* System dependencies
+![Database Schema](Fridge%20Buddy.png)
 
-* Configuration
 
-* Database creation
+## Application site
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Application is currently running on Heroku at https://fridge-partner.herokuapp.com/
