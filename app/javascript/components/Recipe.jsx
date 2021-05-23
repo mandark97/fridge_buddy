@@ -69,14 +69,9 @@ class Recipe extends React.Component {
                 {ingredientList}
               </ul>
             </div>
-            <div className="col-sm-12 col-lg-2">
-              <button type="button" className="btn btn-danger">
-                Delete Recipe
-              </button>
-            </div>
           </div>
-          <Link to="/recipes" className="btn btn-link">
-            Back to recipes
+          <Link to="/" className="btn btn-link">
+            Back to fridge
           </Link>
         </div>
       </div>

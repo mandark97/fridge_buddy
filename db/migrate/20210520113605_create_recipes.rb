@@ -3,10 +3,10 @@
 class CreateRecipes < ActiveRecord::Migration[6.1]
   def change
     create_table :recipes do |t|
-      t.string :name, null: false
+      t.string :name, index: true, null: false
       t.string :image
 
-      t.string :author
+      t.string :author, index: true, null: false
       t.string :author_tip
 
       t.string :people_quantity
@@ -24,7 +24,5 @@ class CreateRecipes < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
-
-    add_index :recipes, :name, unique: true
   end
 end

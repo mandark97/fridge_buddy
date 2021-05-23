@@ -4,9 +4,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :recipes do
+      resources :recipes, only: [:index, :show] do
         get :fridge, on: :collection
       end
     end
   end
+
+  get "*path", to: 'homepage#index', format: false
 end

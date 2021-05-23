@@ -36,6 +36,15 @@ gem 'pagy'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'pry-byebug'
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'rubocop-airbnb'
+  gem 'rubocop-discourse'
+  gem 'factory_bot'
+  gem 'factory_bot_rails'
+  gem 'database_cleaner-active_record'
+  gem 'faker'
 end
 
 group :development do
@@ -47,13 +56,6 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'pry-byebug'
-  gem 'rspec'
-  gem 'rspec-rails'
-  gem 'rubocop-airbnb'
-  gem 'factory_bot'
-  gem 'factory_bot_rails'
-  gem 'database_cleaner'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

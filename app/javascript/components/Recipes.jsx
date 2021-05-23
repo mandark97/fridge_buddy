@@ -34,7 +34,7 @@ class Recipes extends React.Component {
           />
           <div className="card-body">
             <h5 className="card-title">{recipe.name}</h5>
-            <Link to={`/recipes/${recipe.id}`} className="btn custom-button">
+            <Link to={`/recipe/${recipe.id}`} className="btn custom-button">
               View Recipe
             </Link>
           </div>

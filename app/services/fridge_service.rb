@@ -1,26 +1,32 @@
 class FridgeService
-  def initialize
+  def initialize(fridge_params)
+    @ingredients = fridge_params[:ingredients]
+    @tags = fridge_params[:tags]
   end
 
-  def call(ingredients)
-    Recipe.joins(:ingredients).where(match_any(ingredients))
+  def call
+    @relation = Recipe.all
+    @relation = by_ingredients(@relation) if @ingredients.present?
+    @relation = by_tags(@relation) if @tags.present?
+
+    @relation
   end
 
   private
 
-  def match_any(ingredients)
-    ingredient_table[:name].matches_any(format_ingredients(ingredients))
+  def by_ingredients(relation)
+    relation.joins(:ingredients).where(
+      Ingredient.arel_table[:name].matches_any(format_ingredients)
+    )
   end
 
-  def match_all(ingredients)
-    ingredient_table[:name].matches_any(format_ingredients(ingredients))
+  def by_tags(relation)
+    relation.joins(:tags).where(
+      Gutentag::Tag.arel_table[:name].matches_all(@tags)
+    )
   end
 
-  def ingredient_table
-    @ingredient_table ||= Ingredient.arel_table
-  end
-
-  def format_ingredients(ingredients)
-    ingredients.map { |i| "%#{i}%" }
+  def format_ingredients
+    @ingredients.compact.map { |i| "%#{i}%" }
   end
 end
