@@ -10,12 +10,12 @@ class Api::V1::RecipesController < ApplicationController
     pagy, results = pagy(recipes)
 
     render json: RecipeBlueprint.render(results, root: :recipes,
-                                        meta: { pages: pagy.pages, current_page: pagy.page })
+                                                 meta: pagination_meta(pagy))
   end
 
   private
 
   def fridge_params
-    params.permit(:page, ingredients: [])
+    params.permit(:page, :strict_ingredients, ingredients: [])
   end
 end

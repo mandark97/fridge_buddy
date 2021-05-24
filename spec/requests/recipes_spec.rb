@@ -8,7 +8,7 @@ RSpec.describe "Recipes", type: :request do
       get "/api/v1/recipes"
 
       expect(response.status).to eq(200)
-      expect(parsed_response.size).to eq(5)
+      expect(parsed_response["recipes"].size).to eq(5)
     end
   end
 

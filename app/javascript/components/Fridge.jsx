@@ -8,6 +8,7 @@ class Fridge extends React.Component {
     this.state = {
       recipes: [],
       ingredients: [{ name: '' }],
+      strictIngredients: false,
       pagination: { currentPage: 1, pages: 1 },
     }
 
@@ -16,6 +17,7 @@ class Fridge extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.changePage = this.changePage.bind(this)
     this.getData = this.getData.bind(this)
+    this.handleStrictIngredients = this.handleStrictIngredients.bind(this)
   }
 
   addIngredient (e) {
@@ -35,12 +37,12 @@ class Fridge extends React.Component {
   }
 
   getData (pageNum) {
-    const { ingredients } = this.state
+    const { ingredients, strictIngredients } = this.state
 
     let ingredientParams = ingredients.map(
       (ing) => {return `ingredients[]=${ing.name}`}).join('&')
     console.log(ingredientParams)
-    let requestUrl = `/api/v1/recipes?page=${pageNum}&${ingredientParams}`
+    let requestUrl = `/api/v1/recipes?page=${pageNum}&strict_ingredients=${strictIngredients}&${ingredientParams}`
     fetch(requestUrl).
       then(response => response.json()).
       then(data => this.setState({
@@ -67,8 +69,12 @@ class Fridge extends React.Component {
     this.setState(ingredients)
   };
 
+  handleStrictIngredients (e) {
+    this.setState({ strictIngredients: e.target.checked })
+  }
+
   render () {
-    let { ingredients } = this.state
+    let { ingredients, strictIngredients } = this.state
     const { recipes } = this.state
     const { currentPage, pages } = this.state.pagination
     const allRecipes = recipes.map((recipe, index) => (
@@ -138,7 +144,13 @@ class Fridge extends React.Component {
                       onClick={this.addIngredient}>
                 Add new ingredient
               </button>
-
+              <div className="mb-3 form-check">
+                <input type="checkbox" className="form-check-input"
+                       id="strict_ingredients" value={strictIngredients}
+                       onChange={this.handleStrictIngredients}/>
+                <label className="form-check-label">Use
+                  only what I have in fridge</label>
+              </div>
               <input type="submit" className="btn btn-primary" value="Search"/>
             </div>
           </form>
