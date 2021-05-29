@@ -16,6 +16,6 @@ class Api::V1::RecipesController < ApplicationController
   private
 
   def fridge_params
-    params.permit(:page, :strict_ingredients, ingredients: [])
+    params.permit(:page, :strict_ingredients, :sort_method, ingredients: [])
   end
 end

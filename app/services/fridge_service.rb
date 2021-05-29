@@ -4,12 +4,14 @@ class FridgeService
     @tags = fridge_params[:tags]
     @strict_ingredients = ActiveModel::Type::Boolean.new.
       cast(fridge_params.fetch(:strict_ingredients, false))
+    @sort_method = fridge_params.fetch(:sort_method, :match_sort)
   end
 
   def call
     @relation = Recipe.all
     @relation = by_ingredients(@relation) if @ingredients.present?
     @relation = by_tags(@relation) if @tags.present?
+    @relation = send(@sort_method, @relation)
 
     @relation
   end
@@ -22,8 +24,29 @@ class FridgeService
     else
       relation.joins(:ingredients).where(
         Ingredient.arel_table[:name].matches_any(format_ingredients)
-      ).distinct
+      )
     end
+  end
+
+  def count_sort(relation)
+    relation.joins(:ingredients).group(Recipe.arel_table[:id]).order(Ingredient.arel_table[:id].count.desc)
+  end
+
+  def match_sort(relation)
+    ir = IngredientsRecipe.arel_table
+    recipes = Recipe.arel_table
+    ir_alias = ir.alias("asd")
+
+    ingredients_count = recipes
+                          .join(ir.project(ir[:recipe_id], ir[:ingredient_id].count.as("ic"))
+                                  .group(ir[:recipe_id]).as(ir_alias.name))
+                          .on(ir_alias[:recipe_id].eq(recipes[:id]))
+
+    relation.joins(:ingredients)
+            .joins(ingredients_count.join_sources)
+            .group(recipes[:id], ir_alias[:ic])
+            .order((Ingredient.arel_table[:id].count * Arel::Nodes::SqlLiteral.new("100.0") / ir_alias[:ic]).desc)
+
   end
 
   def strict_ingredients_query(relation)

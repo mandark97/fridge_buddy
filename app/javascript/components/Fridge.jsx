@@ -9,6 +9,7 @@ class Fridge extends React.Component {
       recipes: [],
       ingredients: [{ name: '' }],
       strictIngredients: false,
+      sortMethod: 'match_sort',
       pagination: { currentPage: 1, pages: 1 },
     }
 
@@ -18,6 +19,7 @@ class Fridge extends React.Component {
     this.changePage = this.changePage.bind(this)
     this.getData = this.getData.bind(this)
     this.handleStrictIngredients = this.handleStrictIngredients.bind(this)
+    this.changeSort = this.changeSort.bind(this)
   }
 
   addIngredient (e) {
@@ -37,12 +39,12 @@ class Fridge extends React.Component {
   }
 
   getData (pageNum) {
-    const { ingredients, strictIngredients } = this.state
+    const { ingredients, strictIngredients, sortMethod } = this.state
 
     let ingredientParams = ingredients.map(
       (ing) => {return `ingredients[]=${ing.name}`}).join('&')
     console.log(ingredientParams)
-    let requestUrl = `/api/v1/recipes?page=${pageNum}&strict_ingredients=${strictIngredients}&${ingredientParams}`
+    let requestUrl = `/api/v1/recipes?page=${pageNum}&strict_ingredients=${strictIngredients}&sort_method=${sortMethod}&${ingredientParams}`
     fetch(requestUrl).
       then(response => response.json()).
       then(data => this.setState({
@@ -71,6 +73,11 @@ class Fridge extends React.Component {
 
   handleStrictIngredients (e) {
     this.setState({ strictIngredients: e.target.checked })
+  }
+
+  changeSort (e) {
+    console.log(e.target.value)
+    this.setState({ sortMethod: e.target.value })
   }
 
   render () {
@@ -144,13 +151,25 @@ class Fridge extends React.Component {
                       onClick={this.addIngredient}>
                 Add new ingredient
               </button>
-              <div className="mb-3 form-check">
-                <input type="checkbox" className="form-check-input"
-                       id="strict_ingredients" value={strictIngredients}
-                       onChange={this.handleStrictIngredients}/>
-                <label className="form-check-label">Use
-                  only what I have in fridge</label>
+              <div>
+                <div className="mb-3 form-check">
+                  <input type="checkbox" className="form-check-input"
+                         id="strict_ingredients" value={strictIngredients}
+                         onChange={this.handleStrictIngredients}/>
+                  <label className="form-check-label">Use
+                    only what I have in fridge</label>
+                </div>
+                <select className="form-select"
+                        aria-label="Default select example"
+                        onChange={this.changeSort}>
+                  <option defaultValue value="match_sort">Sort by match rate
+                  </option>
+                  <option value="count_sort">Sort by number of ingredients
+                  </option>
+                </select>
               </div>
+
+
               <input type="submit" className="btn btn-primary" value="Search"/>
             </div>
           </form>

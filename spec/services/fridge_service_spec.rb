@@ -37,7 +37,7 @@ RSpec.describe FridgeService do
       subject = FridgeService.new(params)
       response = subject.call
 
-      expect(response.size).to eq(4)
+      expect(response.length).to eq(4)
       expect(response).to include(ham_cheese_bread)
       expect(response).to include(cheese_bread)
       expect(response).to include(potato_bread)
@@ -51,11 +51,40 @@ RSpec.describe FridgeService do
       subject = FridgeService.new(params)
       response = subject.call
 
-      expect(response.size).to eq(4)
+      expect(response.length).to eq(4)
       expect(response).to include(ham_cheese_bread)
       expect(response).to include(cheese_bread)
       expect(response).to include(milk_cheese)
       expect(response).to include(potato_bread)
+    end
+
+    it "sorts recipes using based on match" do
+      params = {
+        ingredients: ["bread", "potato"],
+        sort_method: "match_sort"
+      }
+
+      subject = FridgeService.new(params)
+      response = subject.call
+
+      expect(response.length).to eq(4)
+      expect(response[0]).to eq(potato_bread)
+      expect(response).to include(ham_cheese_bread)
+      expect(response).to include(cheese_bread)
+      expect(response).to include(potato_bread)
+      expect(response).to include(milk_bread)
+    end
+
+    it "sorts recipes using based on number of ingredients" do
+      params = {
+        ingredients: ["bread", "potato", "ham", "cheese"],
+        sort_method: "count_sort"
+      }
+
+      subject = FridgeService.new(params)
+      response = subject.call
+
+      expect(response[0]).to eq(ham_cheese_bread)
     end
   end
 
@@ -68,7 +97,7 @@ RSpec.describe FridgeService do
       subject = FridgeService.new(params)
       response = subject.call
 
-      expect(response.size).to eq(4)
+      expect(response.length).to eq(4)
       expect(response).to include(ham_cheese_bread)
       expect(response).to include(cheese_bread)
       expect(response).to include(milk_bread)
@@ -83,7 +112,7 @@ RSpec.describe FridgeService do
       subject = FridgeService.new(params)
       response = subject.call
 
-      expect(response.size).to eq(0)
+      expect(response.length).to eq(0)
     end
   end
 end
